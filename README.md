@@ -1,5 +1,8 @@
-# ИСРПО - Лабораторная работа №3
+# ИСРПО - Лабораторные работы №2-4
 ## Галсанов Булат М4105
-Метрики, Prometheus, Grafana
+##### №2 - OpenAPI Specification
+##### №3 - Метрики, Prometheus, Grafana
+##### №4 - Логи
 
-![image](https://github.com/user-attachments/assets/4ed3716a-6b8a-44aa-87ea-5b63fb15441c)
+![image](https://github.com/user-attachments/assets/0ec9b5f3-5e54-480a-b280-eb6afbb7c4e7)
+
