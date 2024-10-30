@@ -35,7 +35,7 @@ services:
       - monitoring
     restart: always
     volumes:
-      - grafana-storage:/tmp/lib/grafana
+      - grafana-storage:/var/lib/grafana
 
   loki:
     image: grafana/loki
@@ -48,7 +48,7 @@ services:
     command: -config.file=/etc/loki/local-config.yaml
     volumes:
       - ./loki-config.yaml:/etc/loki/local-config.yaml
-      - ./loki-data:/tmp/loki
+      - ./loki-data:/var/loki
 
   promtail:
     image: grafana/promtail
@@ -58,7 +58,7 @@ services:
     restart: always
     volumes:
       - ./promtail-config.yaml:/etc/promtail/promtail-config.yaml
-      - ./app.log:/tmp/log/app.log
+      - ./app.log:/var/log/app.log
 
   tempo:
     image: grafana/tempo
