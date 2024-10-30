@@ -3,6 +3,7 @@ from flask_swagger_ui import get_swaggerui_blueprint
 from flask_cors import CORS
 import uuid
 from prometheus_client import Counter, generate_latest, CONTENT_TYPE_LATEST
+import logging
 
 app = Flask(__name__)
 CORS(app)
@@ -17,6 +18,15 @@ app.register_blueprint(swaggerui_blueprint, url_prefix=swagger_url)
 
 # Prometheus Metrics
 BOOKS_API_REQUESTS = Counter('books_api_requests_total', 'Total API requests for Books', ['method', 'endpoint'])
+
+# Logging into file
+logging.basicConfig(
+    filename='app.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+    # format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 @app.route(f'{swagger_url}/swagger.json')
 def swagger_json():
@@ -37,12 +47,14 @@ def metrics():
 @app.route('/books', methods=['GET'])
 def get_books():
     """Получить список всех книг"""
+    logger.info("GET /books request received")  # Запись лога
     BOOKS_API_REQUESTS.labels(method='GET', endpoint='/books').inc()
     return jsonify(list(books.values())), 200
 
 @app.route('/books', methods=['POST'])
 def add_book():
     """Добавить новую книгу"""
+    logger.info("POST /books request received")
     BOOKS_API_REQUESTS.labels(method='POST', endpoint='/books').inc()
     data = request.get_json()
     if 'title' not in data or 'author' not in data or 'genre' not in data or 'year' not in data:
@@ -62,6 +74,7 @@ def add_book():
 @app.route('/books/<book_id>', methods=['GET'])
 def get_book(book_id):
     """Получить книгу по ID"""
+    logger.info(f"GET /books/{book_id} request received")
     BOOKS_API_REQUESTS.labels(method='GET', endpoint='/books/<book_id>').inc()
     book = books.get(book_id)
     if not book:
@@ -71,6 +84,7 @@ def get_book(book_id):
 @app.route('/books/<book_id>', methods=['PUT'])
 def update_book(book_id):
     """Обновить информацию о книге"""
+    logger.info(f"PUT /books/{book_id} request received")
     BOOKS_API_REQUESTS.labels(method='PUT', endpoint='/books/<book_id>').inc()
     if book_id not in books:
         abort(404, description="Book not found")
@@ -91,6 +105,7 @@ def update_book(book_id):
 @app.route('/books/<book_id>', methods=['DELETE'])
 def delete_book(book_id):
     """Удалить книгу по ID"""
+    logger.info(f"DELETE /books/{book_id} request received")
     BOOKS_API_REQUESTS.labels(method='DELETE', endpoint='/books/<book_id>').inc()
     if book_id not in books:
         abort(404, description="Book not found")

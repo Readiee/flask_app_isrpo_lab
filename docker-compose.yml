@@ -34,6 +34,29 @@ services:
     volumes:
       - grafana-storage:/var/lib/grafana
 
+  loki:
+    image: grafana/loki
+    container_name: loki
+    ports:
+      - "3100:3100"
+    networks:
+      - monitoring
+    restart: always
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - ./loki-config.yaml:/etc/loki/local-config.yaml
+      - ./loki-data:/tmp/loki
+
+  promtail:
+    image: grafana/promtail
+    container_name: promtail
+    networks:
+      - monitoring
+    restart: always
+    volumes:
+      - ./promtail-config.yaml:/etc/promtail/promtail-config.yaml
+      - ./app.log:/var/log/app.log
+
 networks:
   monitoring:
     driver: bridge
