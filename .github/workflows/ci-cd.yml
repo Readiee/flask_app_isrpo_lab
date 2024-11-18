@@ -16,11 +16,11 @@ jobs:
       - name: Check 1
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}adsfasdf" > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
       - name: Debug SSH
-        run: ssh -v -i ~/.ssh/id_rsa bulatte@172.25.52.197
+        run: ssh -vvv -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}
 
   build:
     runs-on: ubuntu-latest
