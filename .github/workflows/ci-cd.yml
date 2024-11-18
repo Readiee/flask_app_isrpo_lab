@@ -16,9 +16,11 @@ jobs:
       - name: Check 1
         run: |
           mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
 
   build:
     runs-on: ubuntu-latest
+    needs: test-job
 
     steps:
       - name: Checkout code
