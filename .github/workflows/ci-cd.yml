@@ -64,6 +64,9 @@ jobs:
       - name: List files in current directory
         run: ls -la
 
+      - name: Check for docker-compose.yml
+        run: test -f ./docker-compose.yml || echo "docker-compose.yml not found!"
+
       - name: Set up Docker Compose
         run: |
           sudo apt-get update
@@ -71,8 +74,11 @@ jobs:
 
       - name: Deploy locally with Docker Compose
         run: |
+          cd ${{ github.workspace }}
           docker-compose down
           docker-compose up -d --build
+          
+     
 
 #   on server
 #    steps:
