@@ -18,10 +18,9 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts || echo "ssh-keyscan failed"
 
       - name: Debug SSH
-        run: ssh -v -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}
+        run: ssh -v -i ~/.ssh/id_rsa bulatte@172.25.52.197
 
   build:
     runs-on: ubuntu-latest
