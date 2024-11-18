@@ -77,6 +77,9 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
+      - name: Debug SSH
+        run: ssh -vvv ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}
+
       - name: Deploy to server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
@@ -85,3 +88,4 @@ jobs:
           docker rm flask-app || true
           docker run -d --name flask-app -p 5000:5000 ${{ secrets.DOCKER_USERNAME }}/flask-app:latest
           EOF
+      
