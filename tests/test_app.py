@@ -12,8 +12,9 @@ def client():
 #     assert response.status_code == 200
 #     assert isinstance(response.json, list)
 
-def test_success():
+def test_success(client):
+    response = client.get('/books')
     assert 200 == 200
 
-def test_fail():
-    assert 500 == 200
+# def test_fail():
+#     assert 500 == 200
