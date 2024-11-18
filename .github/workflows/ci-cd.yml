@@ -9,20 +9,18 @@ on:
       - master
 
 jobs:
+  test-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check 1
+        run: |
+          mkdir -p ~/.ssh
+
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
-
-      - name: Debug SSH
-        run: ssh -vvv -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}
-
       - name: Checkout code
         uses: actions/checkout@v3
 
