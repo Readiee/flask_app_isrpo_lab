@@ -13,12 +13,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check 11
+      - name: Check 2
+        run: |
+          ping -c 4 172.25.52.197
+          ping -c 4 172.17.0.2
+          ping -c 8.8.8.8
+
+      - name: Check 2
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts || echo "ssh-keyscan failed"
 
-      - name: Check 22
+      - name: Check 3
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
