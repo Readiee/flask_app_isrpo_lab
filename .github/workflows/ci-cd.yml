@@ -17,7 +17,7 @@ jobs:
         run: |
           ping -c 4 172.25.52.197 || echo "failed"
           ping -c 4 172.17.0.2 || echo "failed"
-          ping -c 8.8.8.8 || echo "failed"
+          ping -c 4 8.8.8.8 || echo "failed"
 
       - name: Check 2
         run: |
