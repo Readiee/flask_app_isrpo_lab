@@ -57,36 +57,24 @@ jobs:
     needs: docker
 
 #   locally
-    steps:
-      - name: Print current directory
-        run: pwd
-
-      - name: List files in current directory
-        run: ls -la
-
-      - name: Check for docker-compose.yml
-        run: test -f ./docker-compose.yml || echo "docker-compose.yml not found!"
-
-      - name: Set up Docker Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
-
-      - name: Deploy locally with Docker Compose
-        run: |
-          cd ${{ github.workspace }}
-          docker-compose down
-          docker-compose up -d --build
-          
-     
+#    steps:
+#      - name: Set up Docker Compose
+#        run: |
+#          sudo apt-get update
+#          sudo apt-get install -y docker-compose
+#
+#      - name: Deploy locally with Docker Compose
+#        run: |
+#          docker-compose down
+#          docker-compose up -d --build
 
 #   on server
-#    steps:
-#      - name: Deploy to server
-#        run: |
-#          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-#          docker pull ${{ secrets.DOCKER_USERNAME }}/flask-app:latest
-#          docker stop flask-app || true
-#          docker rm flask-app || true
-#          docker run -d --name flask-app -p 5000:5000 ${{ secrets.DOCKER_USERNAME }}/flask-app:latest
-#          EOF
+    steps:
+      - name: Deploy to server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          docker pull ${{ secrets.DOCKER_USERNAME }}/flask-app:latest
+          docker stop flask-app || true
+          docker rm flask-app || true
+          docker run -d --name flask-app -p 5000:5000 ${{ secrets.DOCKER_USERNAME }}/flask-app:latest
+          EOF
