@@ -70,10 +70,10 @@ jobs:
 
 #   on server
     steps:
-      - name: Start SSH agent
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+#      - name: Start SSH agent
+#        uses: webfactory/ssh-agent@v0.5.3
+#        with:
+#          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Set up SSH
         run: |
