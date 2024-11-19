@@ -9,32 +9,8 @@ on:
       - master
 
 jobs:
-  test-job:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check 2
-        run: |
-          ping -c 4 172.25.52.197 || echo "failed 1"
-          ping -c 4 172.17.0.2 || echo "failed 2"
-          ping -c 4 8.8.8.8 || echo "failed 3"
-
-      - name: Check 2
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts || echo "ssh-keyscan failed"
-
-      - name: Check 3
-        run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-
-      - name: Debug SSH
-        run: ssh -v -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}
-
   build:
     runs-on: ubuntu-latest
-    needs: test-job
 
     steps:
       - name: Checkout code
@@ -81,24 +57,19 @@ jobs:
     needs: docker
 
 #   locally
-#    steps:
-#      - name: Set up Docker Compose
-#        run: |
-#          sudo apt-get update
-#          sudo apt-get install -y docker-compose
-#
-#      - name: Deploy locally with Docker Compose
-#        run: |
-#          docker-compose down
-#          docker-compose up -d --build
+    steps:
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Deploy locally with Docker Compose
+        run: |
+          docker-compose down
+          docker-compose up -d --build
 
 #   on server
-    steps:
-#      - name: Start SSH agent
-#        uses: webfactory/ssh-agent@v0.5.3
-#        with:
-#          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-#
+#    steps:
 #      - name: Set up SSH
 #        run: |
 #          mkdir -p ~/.ssh
@@ -106,15 +77,12 @@ jobs:
 #          chmod 600 ~/.ssh/id_rsa
 #          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 #
-#      - name: Debug SSH
-#        run: ssh -vvv -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}
-
-      - name: Deploy to server
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-          docker pull ${{ secrets.DOCKER_USERNAME }}/flask-app:latest
-          docker stop flask-app || true
-          docker rm flask-app || true
-          docker run -d --name flask-app -p 5000:5000 ${{ secrets.DOCKER_USERNAME }}/flask-app:latest
-          EOF
+#      - name: Deploy to server
+#        run: |
+#          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+#          docker pull ${{ secrets.DOCKER_USERNAME }}/flask-app:latest
+#          docker stop flask-app || true
+#          docker rm flask-app || true
+#          docker run -d --name flask-app -p 5000:5000 ${{ secrets.DOCKER_USERNAME }}/flask-app:latest
+#          EOF
       
