@@ -57,32 +57,32 @@ jobs:
     needs: docker
 
 #   locally
-    steps:
-      - name: Set up Docker Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
-
-      - name: Deploy locally with Docker Compose
-        run: |
-          docker-compose down
-          docker-compose up -d --build
+#    steps:
+#      - name: Set up Docker Compose
+#        run: |
+#          sudo apt-get update
+#          sudo apt-get install -y docker-compose
+#
+#      - name: Deploy locally with Docker Compose
+#        run: |
+#          docker-compose down
+#          docker-compose up -d --build
 
 #   on server
-#    steps:
+    steps:
 #      - name: Set up SSH
 #        run: |
 #          mkdir -p ~/.ssh
 #          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
 #          chmod 600 ~/.ssh/id_rsa
 #          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
-#
-#      - name: Deploy to server
-#        run: |
+
+      - name: Deploy to server
+        run: |
 #          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-#          docker pull ${{ secrets.DOCKER_USERNAME }}/flask-app:latest
-#          docker stop flask-app || true
-#          docker rm flask-app || true
-#          docker run -d --name flask-app -p 5000:5000 ${{ secrets.DOCKER_USERNAME }}/flask-app:latest
-#          EOF
+          docker pull ${{ secrets.DOCKER_USERNAME }}/flask-app:latest
+          docker stop flask-app || true
+          docker rm flask-app || true
+          docker run -d --name flask-app -p 5000:5000 ${{ secrets.DOCKER_USERNAME }}/flask-app:latest
+          EOF
       
