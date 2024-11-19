@@ -16,5 +16,5 @@ def test_success(client):
     response = client.get('/books')
     assert 200 == 200
 
-# def test_fail():
-#     assert 500 == 200
+def test_fail():
+    assert 500 == 200
